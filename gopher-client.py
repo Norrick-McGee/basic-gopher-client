@@ -9,10 +9,15 @@ file_name = sys.argv[2]
 sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
 sock.connect((host,gopher_port))
-sock.sendall(file_name+"\r\n")
+
+message = file_name + "\r\n"
+message = message.encode()  # add line for python3
+
+sock.sendall(message)
 
 while True:
-    buffer = sock.recv(2048)
+    #buff = sock.recv(2048)                  #python2
+    buffer = sock.recv(2048).decode('utf-8') #python3
     if not len(buffer):
         break
     sys.stdout.write(buffer)
